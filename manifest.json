@@ -6,16 +6,16 @@
   "version": "1.0",
   
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["js/background.js"]
   },
   
   "content_scripts": [{
-    "js": ["popup.js", "utils.js"],
+    "js": ["js/popup.js", "js/utils.js"],
     "matches": ["http://*/*", "https://*/*"]
  }],
 
   "browser_action": {
-    "default_icon": "icon.png",
+    "default_icon": "icons/icon.png",
     "default_popup": "popup.html"
   },
   "permissions": [

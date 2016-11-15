@@ -1,10 +1,11 @@
 // Copyright (c) 2014 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
-
-var parsedCaptions;
-
+jQuery.noConflict()(function ($) {
+    $(document).ready(function() {
+        var parsedCaptions;
+    });
+});
 
 /**
  * Get the current URL.
@@ -12,24 +13,25 @@ var parsedCaptions;
  * @param {function(string)} callback - called when the URL of the current tab
  *   is found.
  */
-$(document).ready(function () {
-    $("#search-button").click(function () {
+$(document).ready(function() {
+    $("#search-button").click(function() {
         setSearchResult(search($("#search").val(), parsedCaptions));
         $("#attribute0").click();
 
     });
-    $('#search').bind("enterKey", function (e) {
+    $('#search').bind("enterKey", function(e) {
         setSearchResult(search($("#search").val(), parsedCaptions));
         $("#attribute0").click();
 
     });
-    $('#search').keyup(function (e) {
+    $('#search').keyup(function(e) {
         if (e.keyCode == 13) {
             $(this).trigger("enterKey");
         }
     });
 
 });
+
 function getCurrentTabUrl(callback) {
     // Query filter to be passed to chrome.tabs.query - see
     // https://developer.chrome.com/extensions/tabs#method-query
@@ -38,7 +40,7 @@ function getCurrentTabUrl(callback) {
         currentWindow: true
     };
 
-    chrome.tabs.query(queryInfo, function (tabs) {
+    chrome.tabs.query(queryInfo, function(tabs) {
         // chrome.tabs.query invokes the callback with a list of tabs that match the
         // query. When the popup is opened, there is certainly a window and at least
         // one tab, so we can safely assume that |tabs| is a non-empty array.
@@ -76,12 +78,12 @@ function renderStatus(statusText) {
 }
 
 chrome.runtime.onMessage.addListener(
-    function (request, sender, sendResponse) {
+    function(request, sender, sendResponse) {
         parsedCaptions = parseData(request.data);
     });
 
-document.addEventListener('DOMContentLoaded', function () {
-    getCurrentTabUrl(function (url) {
+document.addEventListener('DOMContentLoaded', function() {
+    getCurrentTabUrl(function(url) {
 
         // Todo: This probably includes false positives
         if (!url.includes("youtube.com/watch?")) {
@@ -90,8 +92,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         }
 
-        chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-            chrome.tabs.executeScript(tabs[0].id, {file: "extract.js"});
+        chrome.tabs.query({
+            active: true,
+            currentWindow: true
+        }, function(tabs) {
+            chrome.tabs.executeScript(tabs[0].id, {
+                file: "extract.js"
+            });
         });
 
     });
